@@ -14,6 +14,9 @@ Rect.prototype = _.extend(Rect.prototype, Node.prototype, {
     }
     if (this.stroke) {
       ctx.strokeStyle = this.stroke;
+      ctx.lineWidth = this.lineWidth || 1;
+      ctx.lineCap = this.lineCap || 'butt';
+      ctx.lineJoin = this.lineJoin || 'miter';
       ctx.strokeRect(0, 0, this.width || 0, this.height || 0);
     }
   },
