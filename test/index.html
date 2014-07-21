@@ -15,6 +15,49 @@
 	<script src="../lib/path.js"></script>
 	<script src="spec.js"></script>
 
+	<script>
+		var scene = path(document.getElementById('canvas'));
 
+		var group = path.group({
+			x: 100,
+			y: 100
+		});
+
+		scene.add(group);
+
+		var group2 = path.group({
+			x: 0,
+			y: 0
+		});
+
+		group.add(group2);
+
+		for (var i=0; i<100; i++) {
+			var rect = path.rect({
+				fillStyle: '#779', //rgb('+Math.floor(Math.random()*255)+','+Math.floor(Math.random()*255)+','+Math.floor(Math.random()*255)+')',
+				x: Math.random()*300,
+				y: Math.random()*300,
+				width: 5 + Math.random()*50,
+				height: 5 + Math.random()*50
+			});
+			group2.add(rect);
+		}
+
+		var x = 0;
+		function go() {
+			group.attr({
+				x: 100 + 100*Math.sin(x++/20)
+			});
+			group2.attr({
+				y: 50 + 100*Math.cos(x++/20)
+			});
+			scene.render();
+
+			requestAnimationFrame(go);
+		};
+
+		go();
+
+	</script>
 </body>
 </html>
