@@ -58,6 +58,7 @@ _.extend(Path.prototype, Group.prototype, {
 // Create
 var attributes = {
   rect: require('./rect'),
+  path: require('./path'),
   group: Group
 };
 

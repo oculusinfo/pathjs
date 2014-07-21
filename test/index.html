@@ -16,52 +16,80 @@
 	<script src="spec.js"></script>
 
 	<script>
+		// var scene = path(document.getElementById('canvas'));
+
+		// var group = path.group({
+		// 	x: 100,
+		// 	y: 100
+		// });
+
+		// scene.add(group);
+
+		// var group2 = path.group({
+		// 	x: 0,
+		// 	y: 0
+		// });
+
+		// group.add(group2);
+
+		// for (var i=0; i<100; i++) {
+		// 	(function() {
+		// 		var rect = path.rect({
+		// 			fillStyle: '#779', //rgb('+Math.floor(Math.random()*255)+','+Math.floor(Math.random()*255)+','+Math.floor(Math.random()*255)+')',
+		// 			x: Math.random()*300,
+		// 			y: Math.random()*300,
+		// 			width: 5 + Math.random()*50,
+		// 			height: 5 + Math.random()*50
+		// 		});
+		// 		rect.on('click', function(){
+		// 			rect.fillStyle = '#f00';
+		// 			// scene.render();
+		// 		});
+		// 		group2.add(rect);
+		// 	}());
+		// }
+
+		// var x = 0;
+		// function go() {
+		// 	group.attr({
+		// 		x: 100 + 100*Math.sin(x++/20)
+		// 	});
+		// 	group2.attr({
+		// 		y: 50 + 100*Math.cos(x++/20)
+		// 	});
+		// 	scene.render();
+
+		// 	requestAnimationFrame(go);
+		// };
+
+		// go();
+
+	</script>
+
+	<script>
 		var scene = path(document.getElementById('canvas'));
 
-		var group = path.group({
-			x: 100,
-			y: 100
-		});
-
-		scene.add(group);
-
-		var group2 = path.group({
-			x: 0,
-			y: 0
-		});
-
-		group.add(group2);
-
-		for (var i=0; i<100; i++) {
+		for (var i=0; i<1000; i++) {
 			(function() {
-				var rect = path.rect({
-					fillStyle: '#779', //rgb('+Math.floor(Math.random()*255)+','+Math.floor(Math.random()*255)+','+Math.floor(Math.random()*255)+')',
-					x: Math.random()*300,
-					y: Math.random()*300,
-					width: 5 + Math.random()*50,
-					height: 5 + Math.random()*50
+				var p = path.path({
+					path: 'M-32.7929642,0A32.7929642,32.7929642,0,0,1,32.7929642,0A32.7929642,32.7929642,0,0,1,-32.7929642,0ZM-15.608177349999998,0A15.608177349999998,15.608177349999998,0,0,0,15.608177349999998,0A15.608177349999998,15.608177349999998,0,0,0,-15.608177349999998,0Z',
+					fillStyle: '#7dd',
+					stroke: '#000',
+					x: Math.random() * 200 + 100,
+					y: Math.random() * 200 + 100
 				});
-				rect.on('click', function(){
-					rect.fillStyle = '#f00';
-					// scene.render();
+
+				p.on('mousemove', function() {
+					p.fillStyle = 'rgb(120,120,'+Math.floor(Math.random()*255)+')';
 				});
-				group2.add(rect);
+
+				scene.add(p);
 			}());
 		}
-
-		var x = 0;
 		function go() {
-			group.attr({
-				x: 100 + 100*Math.sin(x++/20)
-			});
-			group2.attr({
-				y: 50 + 100*Math.cos(x++/20)
-			});
 			scene.render();
-
 			requestAnimationFrame(go);
 		};
-
 		go();
 
 	</script>
