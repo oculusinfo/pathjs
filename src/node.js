@@ -4,6 +4,7 @@ var ID = 0;
 
 var Node = function(attributes) {
   this.id = ID++;
+  this.handlers = {};
   _.extend(this, attributes);
 };
 
@@ -22,15 +23,34 @@ Node.prototype = {
   },
 
   on: function(type, handler) {
-
+    var handlers = this.handlers[type];
+    if (!handlers) {
+      handlers = this.handlers[type] = [];
+    }
+    handlers.push(handler);
   },
 
   off: function(type, handler) {
-
+    if (!handler) {
+      this.handlers[type] = [];
+    } else {
+      var handlers = this.handlers[type];
+      var idx = handlers.indexOf(handler);
+      if (idx >= 0) {
+        handlers.splice(idx, 1);
+      }
+    }
   },
 
-  trigger: function(event) {
-
+  trigger: function(type, event) {
+    var handlers = this.handlers[type];
+    if (handlers) {
+      handlers.forEach(function(handler) {
+        handler(event);
+      });
+      return true;
+    }
+    return false;
   },
 
   // noop implementations

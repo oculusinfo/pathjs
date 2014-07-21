@@ -33,14 +33,20 @@
 		group.add(group2);
 
 		for (var i=0; i<100; i++) {
-			var rect = path.rect({
-				fillStyle: '#779', //rgb('+Math.floor(Math.random()*255)+','+Math.floor(Math.random()*255)+','+Math.floor(Math.random()*255)+')',
-				x: Math.random()*300,
-				y: Math.random()*300,
-				width: 5 + Math.random()*50,
-				height: 5 + Math.random()*50
-			});
-			group2.add(rect);
+			(function() {
+				var rect = path.rect({
+					fillStyle: '#779', //rgb('+Math.floor(Math.random()*255)+','+Math.floor(Math.random()*255)+','+Math.floor(Math.random()*255)+')',
+					x: Math.random()*300,
+					y: Math.random()*300,
+					width: 5 + Math.random()*50,
+					height: 5 + Math.random()*50
+				});
+				rect.on('click', function(){
+					rect.fillStyle = '#f00';
+					// scene.render();
+				});
+				group2.add(rect);
+			}());
 		}
 
 		var x = 0;
