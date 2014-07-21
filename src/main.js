@@ -19,6 +19,11 @@ var Path = function(element) {
   this.renderer = new Renderer(this.context);
   this.picker = new Picker(this.context);
 
+  // Offset by 1/2 pixel to align with pixel edges
+  this.x = 0.5;
+  this.y = 0.5;
+
+  // Register event listeners on canvas that use picker to hittest
   this.events.forEach(function(type) {
     self.el.addEventListener(type, function(e) {
       var hit = self.picker.pick(self, e.offsetX, e.offsetY, e.offsetX, e.offsetY);
