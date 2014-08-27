@@ -22,6 +22,20 @@ Node.prototype = {
     return this;
   },
 
+  tweenAttr: function(attributes, transition) {
+    transition = transition || {};
+
+    var keys = Object.keys(attributes);
+    var self = this;
+
+    this.tween = new TWEEN.Tween(this)
+      .to(attributes, transition.duration || 1000)
+      .onStop(function() {
+        self.tween = null;
+      })
+      .start();
+  },
+
   on: function(type, handler) {
     var handlers = this.handlers[type];
     if (!handlers) {

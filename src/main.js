@@ -41,6 +41,17 @@ _.extend(Path.prototype, Group.prototype, {
   ],
 
   render: function() {
+    var self = this;
+    var activeAnimation = TWEEN.getAll().length > 0;
+
+    if (activeAnimation) {
+      TWEEN.update();
+
+      requestAnimationFrame(function() {
+        self.render();
+      });
+    }
+
     this.context.clearRect(0, 0, 500, 500);
     this.draw(this.context);
   }

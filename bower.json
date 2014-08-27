@@ -1,7 +1,9 @@
 {
   "name": "pathjs",
   "version": "0.0.0",
-  "dependencies": {},
+  "dependencies": {
+    "tween.js": "git@github.com:sole/tween.js.git"
+  },
   "devDependencies": {
     "qunit": "~1.14.0"
   }
