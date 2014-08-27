@@ -45,11 +45,19 @@ Path.prototype = _.extend(Path.prototype, Node.prototype, {
   },
 
   pick: function(ctx, x, y, lx, ly) {
+    var isHit = false;
+
     ctx.save();
     ctx.translate(this.x || 0, this.y || 0);
 
     this.sketch(ctx);
-    var isHit = ctx.isPointInPath(x,y);
+
+    if (this.fillStyle) {
+      isHit = ctx.isPointInPath(x,y);
+    }
+    if (!isHit && this.stroke) {
+      isHit = ctx.isPointInStroke(x,y);
+    }
 
     ctx.restore();
     return isHit && this;
