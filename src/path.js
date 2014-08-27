@@ -18,6 +18,9 @@ Path.prototype = _.extend(Path.prototype, Node.prototype, {
   },
 
   draw: function(ctx) {
+    ctx.save();
+    ctx.translate(this.x || 0, this.y || 0);
+
     if (this.fillStyle) {
       ctx.fillStyle = this.fillStyle;
     }
@@ -25,6 +28,8 @@ Path.prototype = _.extend(Path.prototype, Node.prototype, {
     if (this.stroke) {
       ctx.strokeStyle = this.stroke;
       ctx.lineWidth = this.lineWidth || 1;
+      ctx.lineCap = this.lineCap || 'butt';
+      ctx.lineJoin = this.lineJoin || 'miter';
     }
 
     this.sketch(ctx);
@@ -35,11 +40,19 @@ Path.prototype = _.extend(Path.prototype, Node.prototype, {
     if (this.fillStyle) {
       ctx.fill();
     }
+
+    ctx.restore();
   },
 
   pick: function(ctx, x, y, lx, ly) {
+    ctx.save();
+    ctx.translate(this.x || 0, this.y || 0);
+
     this.sketch(ctx);
-    return ctx.isPointInPath(x,y);
+    var isHit = ctx.isPointInPath(x,y);
+
+    ctx.restore();
+    return isHit && this;
   }
 });
 

@@ -23,8 +23,41 @@ Group.prototype = _.extend(Group.prototype, Node.prototype, {
     return this;
   },
 
-  forEachChild: function(fn, context) {
-    this.children.forEach(fn, context);
+  pick: function(ctx, x, y, lx, ly) {
+    var children = this.children;
+    var tx = this.x || 0;
+    var ty = this.y || 0;
+    var result;
+
+    ctx.save();
+    ctx.translate(tx, ty);
+
+    // Apply transform to local coordinate values
+    lx -= tx;
+    ly -= ty;
+
+    for (var i=children.length-1; i>=0; i--) {
+      result = children[i].pick(ctx, x, y, lx, ly);
+      if (result) {
+        break;
+      }
+    }
+
+    ctx.restore();
+    return result;
+  },
+
+  draw: function(ctx) {
+    var children = this.children;
+
+    ctx.save();
+    ctx.translate(this.x || 0, this.y || 0);
+
+    for (var i=0, l=children.length; i<l; i++) {
+      children[i].draw(ctx);
+    };
+
+    ctx.restore();
   }
 });
 

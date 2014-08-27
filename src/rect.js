@@ -8,21 +8,33 @@ var Rect = function() {
 
 Rect.prototype = _.extend(Rect.prototype, Node.prototype, {
   draw: function(ctx) {
+    var x = this.x || 0;
+    var y = this.y || 0;
+    var width = this.width || 0;
+    var height = this.height || 0;
+
     if (this.fillStyle) {
       ctx.fillStyle = this.fillStyle;
-      ctx.fillRect(0, 0, this.width || 0, this.height || 0);
+      ctx.fillRect(x, y, width, height);
     }
     if (this.stroke) {
       ctx.strokeStyle = this.stroke;
       ctx.lineWidth = this.lineWidth || 1;
       ctx.lineCap = this.lineCap || 'butt';
       ctx.lineJoin = this.lineJoin || 'miter';
-      ctx.strokeRect(0, 0, this.width || 0, this.height || 0);
+      ctx.strokeRect(x, y, width, height);
     }
   },
 
   pick: function(ctx, x, y, lx, ly) {
-    return lx >= 0 && lx < this.width && ly >= 0 && ly < this.height;
+    var x = this.x || 0;
+    var y = this.y || 0;
+    var width = this.width || 0;
+    var height = this.height || 0;
+
+    if (lx >= x && lx < x+width && ly >= y && ly < y+height) {
+      return this;
+    }
   }
 });
 

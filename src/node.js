@@ -53,10 +53,11 @@ Node.prototype = {
     return false;
   },
 
-  // noop implementations
-  draw: function() {},
-  pick: function() { return false; },
-  forEachChild: function() {}
+  draw: function(ctx) {
+  },
+
+  pick: function(ctx, x, y, lx, ly) {
+  }
 }
 
 module.exports = Node;

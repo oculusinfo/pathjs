@@ -1,8 +1,5 @@
 var _ = require('./util');
 var Group = require('./group');
-var Renderer = require('./renderer');
-var Picker = require('./picker');
-
 
 
 var Path = function(element) {
@@ -16,8 +13,6 @@ var Path = function(element) {
 
   this.el = element;
   this.context = element.getContext("2d");
-  this.renderer = new Renderer(this.context);
-  this.picker = new Picker(this.context);
 
   // Offset by 1/2 pixel to align with pixel edges
   this.x = 0.5;
@@ -26,7 +21,7 @@ var Path = function(element) {
   // Register event listeners on canvas that use picker to hittest
   this.events.forEach(function(type) {
     self.el.addEventListener(type, function(e) {
-      var hit = self.picker.pick(self, e.offsetX, e.offsetY, e.offsetX, e.offsetY);
+      var hit = self.pick(self.context, e.offsetX, e.offsetY, e.offsetX, e.offsetY);
       while (hit) {
         if (hit.trigger(type, e)) {
           hit = null;
@@ -46,8 +41,8 @@ _.extend(Path.prototype, Group.prototype, {
   ],
 
   render: function() {
-    this.context.clearRect(0, 0, this.el.width, this.el.height);
-    this.renderer.render(this);
+    this.context.clearRect(0, 0, 500, 500);
+    this.draw(this.context);
   }
 });
 
