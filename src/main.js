@@ -42,7 +42,19 @@ _.extend(Path.prototype, Group.prototype, {
 
   render: function() {
     var self = this;
-    var activeAnimation = TWEEN.getAll().length > 0;
+    var activeAnimation = window.TWEEN && TWEEN.getAll().length > 0;
+
+    // Update size + clear
+    var width = this.el.clientWidth;
+    var height = this.el.clientHeight;
+    this.context.canvas.width = width;
+    this.context.canvas.height = height;
+
+    // TODO pixel ratio support
+    // var pixelRatio = 2;
+    // this.context.canvas.width = width*pixelRatio;
+    // this.context.canvas.height = height*pixelRatio;
+    // this.context.scale(pixelRatio,pixelRatio);
 
     if (activeAnimation) {
       TWEEN.update();
@@ -52,7 +64,6 @@ _.extend(Path.prototype, Group.prototype, {
       });
     }
 
-    this.context.clearRect(0, 0, 500, 500);
     this.draw(this.context);
   }
 });
