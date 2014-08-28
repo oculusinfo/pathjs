@@ -4,8 +4,10 @@ var ID = 0;
 
 var Node = function(attributes) {
   this.id = ID++;
+  this.parent = null;
   this.visible = true;
   this.handlers = {};
+
   _.extend(this, attributes);
 };
 
@@ -26,8 +28,9 @@ Node.prototype = {
   tweenAttr: function(attributes, transition) {
     transition = transition || {};
 
-    var keys = Object.keys(attributes);
     var self = this;
+
+    // XXX Can only tween numeric attributes - guard? support others through immediate set?
 
     this.tween = new TWEEN.Tween(this)
       .to(attributes, transition.duration || 1000)
