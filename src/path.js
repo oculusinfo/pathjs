@@ -11,10 +11,20 @@ var Path = function() {
 
 Path.prototype = _.extend(Path.prototype, Node.prototype, {
 
+  attr: function(attributes) {
+    Node.prototype.attr.call(this, attributes);
+    if (attributes.path) {
+      this.commandCache = null;
+    }
+    return this;
+  },
+
   // Much from Fabric.js - https://github.com/kangax/fabric.js/blob/master/src/shapes/path.class.js
   sketch: function(ctx) {
-    var pathCommands = this.commandCache || (this.commandCache = svg.parse(this.path));
-    svg.render(ctx, pathCommands);
+    if (this.path && this.path.length > 0) {
+      var pathCommands = this.commandCache || (this.commandCache = svg.parse(this.path));
+      svg.render(ctx, pathCommands);
+    }
   },
 
   draw: function(ctx) {
