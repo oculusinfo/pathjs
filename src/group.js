@@ -29,6 +29,10 @@ Group.prototype = _.extend(Group.prototype, Node.prototype, {
     var ty = this.y || 0;
     var result;
 
+    if (!this.visible) {
+      return;
+    }
+
     ctx.save();
     ctx.translate(tx, ty);
 
@@ -49,6 +53,10 @@ Group.prototype = _.extend(Group.prototype, Node.prototype, {
 
   draw: function(ctx) {
     var children = this.children;
+
+    if (!this.visible) {
+      return;
+    }
 
     ctx.save();
     ctx.translate(this.x || 0, this.y || 0);

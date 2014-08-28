@@ -8,6 +8,10 @@ var Text = function() {
 
 Text.prototype = _.extend(Text.prototype, Node.prototype, {
   draw: function(ctx) {
+    if (!this.visible) {
+      return;
+    }
+
     var x = this.x || 0;
     var y = this.y || 0;
 
@@ -29,6 +33,10 @@ Text.prototype = _.extend(Text.prototype, Node.prototype, {
   },
 
   pick: function(ctx, x, y, lx, ly) {
+    if (!this.visible) {
+      return;
+    }
+
     var x = this.x || 0;
     var y = this.y || 0;
     var width = ctx.measureText(this.text);

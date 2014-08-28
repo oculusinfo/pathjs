@@ -8,6 +8,10 @@ var Rect = function() {
 
 Rect.prototype = _.extend(Rect.prototype, Node.prototype, {
   draw: function(ctx) {
+    if (!this.visible) {
+      return;
+    }
+
     var x = this.x || 0;
     var y = this.y || 0;
     var width = this.width || 0;
@@ -27,6 +31,10 @@ Rect.prototype = _.extend(Rect.prototype, Node.prototype, {
   },
 
   pick: function(ctx, x, y, lx, ly) {
+    if (!this.visible) {
+      return;
+    }
+
     var x = this.x || 0;
     var y = this.y || 0;
     var width = this.width || 0;

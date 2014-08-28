@@ -18,6 +18,10 @@ Path.prototype = _.extend(Path.prototype, Node.prototype, {
   },
 
   draw: function(ctx) {
+    if (!this.visible) {
+      return;
+    }
+
     ctx.save();
     ctx.translate(this.x || 0, this.y || 0);
 
@@ -46,6 +50,10 @@ Path.prototype = _.extend(Path.prototype, Node.prototype, {
 
   pick: function(ctx, x, y, lx, ly) {
     var isHit = false;
+
+    if (!this.visible) {
+      return;
+    }
 
     ctx.save();
     ctx.translate(this.x || 0, this.y || 0);

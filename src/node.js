@@ -4,6 +4,7 @@ var ID = 0;
 
 var Node = function(attributes) {
   this.id = ID++;
+  this.visible = true;
   this.handlers = {};
   _.extend(this, attributes);
 };
