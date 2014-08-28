@@ -19,27 +19,17 @@ var Path = function(element) {
   this.y = 0.5;
 
   // Register event listeners on canvas that use picker to hittest
-  this.events.forEach(function(type) {
-    self.el.addEventListener(type, function(e) {
-      var hit = self.pick(self.context, e.offsetX, e.offsetY, e.offsetX, e.offsetY);
-      while (hit) {
-        if (hit.trigger(type, e)) {
-          hit = null;
-        } else {
-          hit = hit.parent;
-        }
-      }
-    });
+  this._handle = this._handle.bind(this);
+  this._mousemove = this._mousemove.bind(this);
+
+  ['click', 'dblclick', 'mousedown', 'mouseup'].forEach(function(type) {
+    self.el.addEventListener(type, self._handle);
   });
+  this.el.addEventListener('mousemove', this._mousemove);
 };
 
 
 _.extend(Path.prototype, Group.prototype, {
-  events: [
-    'click',
-    'mousemove'
-  ],
-
   render: function() {
     var self = this;
     var activeAnimation = window.TWEEN && TWEEN.getAll().length > 0;
@@ -65,6 +55,36 @@ _.extend(Path.prototype, Group.prototype, {
     }
 
     this.draw(this.context);
+  },
+
+  // General handler for simple events (click, mousedown, etc)
+  _handle: function(e) {
+    var hit = this.pick(this.context, e.offsetX, e.offsetY, e.offsetX, e.offsetY);
+    if (hit) {
+      e.targetNode = hit;
+      hit.trigger(e.type, e);
+    }
+  },
+
+  _mousemove: function(e) {
+    var hit = this.pick(this.context, e.offsetX, e.offsetY, e.offsetX, e.offsetY);
+    if (hit) {
+      e.targetNode = hit;
+    }
+    // Manage mouseout/mouseover
+    if (this._lastover != hit) {
+      if (this._lastover) {
+        this._lastover.trigger('mouseout', e);
+      }
+      this._lastover = hit;
+      if (hit) {
+        hit.trigger('mouseover', e);
+      }
+    }
+    // Always send mousemove last
+    if (hit) {
+      hit.trigger('mousemove', e);
+    }
   }
 });
 

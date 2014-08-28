@@ -61,14 +61,20 @@ Node.prototype = {
   },
 
   trigger: function(type, event) {
+    var handled = false;
     var handlers = this.handlers[type];
+
     if (handlers) {
       handlers.forEach(function(handler) {
-        handler(event);
+        handled = handler(event) || handled;
       });
-      return true;
     }
-    return false;
+
+    if (!handled && this.parent) {
+      handled = this.parent.trigger(type, event);
+    }
+
+    return handled;
   },
 
   remove: function() {
