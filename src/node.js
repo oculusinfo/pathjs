@@ -68,6 +68,12 @@ Node.prototype = {
     return false;
   },
 
+  remove: function() {
+    if (this.parent) {
+      this.parent.remove(this);
+    }
+  },
+
   draw: function(ctx) {
   },
 

@@ -11,16 +11,24 @@ var Group = function() {
 Group.prototype = _.extend(Group.prototype, Node.prototype, {
 
   add: function(child) {
+    child.parent = this;
     this.children.push(child);
     return this;
   },
 
   remove: function(child) {
-    var idx = this.children.indexOf(child);
-    if (idx >= 0) {
-      this.children.splice(idx, 1);
+    if (child) {
+      // Remove child
+      var idx = this.children.indexOf(child);
+      if (idx >= 0) {
+        this.children.splice(idx, 1);
+        child.parent = null;
+        return child;
+      }
+    } else {
+      // Remove self
+      return Node.prototype.remove.call(this);
     }
-    return this;
   },
 
   pick: function(ctx, x, y, lx, ly) {
