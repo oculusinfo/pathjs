@@ -39,8 +39,8 @@ Path.prototype = _.extend(Path.prototype, Node.prototype, {
       ctx.fillStyle = this.fillStyle;
     }
 
-    if (this.stroke) {
-      ctx.strokeStyle = this.stroke;
+    if (this.strokeStyle) {
+      ctx.strokeStyle = this.strokeStyle;
       ctx.lineWidth = this.lineWidth || 1;
       ctx.lineCap = this.lineCap || 'butt';
       ctx.lineJoin = this.lineJoin || 'miter';
@@ -48,7 +48,7 @@ Path.prototype = _.extend(Path.prototype, Node.prototype, {
 
     this.sketch(ctx);
 
-    if (this.stroke) {
+    if (this.strokeStyle) {
       ctx.stroke();
     }
     if (this.fillStyle) {

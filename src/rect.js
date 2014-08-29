@@ -21,8 +21,8 @@ Rect.prototype = _.extend(Rect.prototype, Node.prototype, {
       ctx.fillStyle = this.fillStyle;
       ctx.fillRect(x, y, width, height);
     }
-    if (this.stroke) {
-      ctx.strokeStyle = this.stroke;
+    if (this.strokeStyle) {
+      ctx.strokeStyle = this.strokeStyle;
       ctx.lineWidth = this.lineWidth || 1;
       ctx.lineCap = this.lineCap || 'butt';
       ctx.lineJoin = this.lineJoin || 'miter';
