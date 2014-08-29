@@ -26,16 +26,30 @@ Node.prototype = {
   },
 
   tweenAttr: function(attributes, transition) {
+    var self = this;
+    var key, statics;
     transition = transition || {};
 
-    var self = this;
+    // Only support tweening numbers - statically set everything else
+    for (key in attributes) {
+      if (attributes.hasOwnProperty(key) && typeof attributes[key] != 'number') {
+        statics = statics || {};
+        statics[key] = attributes[key];
+        delete attributes[key];
+      }
+    }
 
-    // XXX Can only tween numeric attributes - guard? support others through immediate set?
+    if (statics) {
+      this.attr(statics);
+    }
 
     this.tween = new TWEEN.Tween(this)
       .to(attributes, transition.duration || 1000)
       .onStop(function() {
         self.tween = null;
+        if (transition.callback) {
+          transition.callback(this, attributes);
+        }
       })
       .start();
   },
