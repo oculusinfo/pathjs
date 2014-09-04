@@ -13,6 +13,7 @@ var Path = function(element) {
 
   this.el = element;
   this.context = element.getContext("2d");
+  this._polyfill(this.context);
 
   // Offset by 1/2 pixel to align with pixel edges
   this.x = 0.5;
@@ -30,6 +31,23 @@ var Path = function(element) {
 
 
 _.extend(Path.prototype, Group.prototype, {
+  _polyfill: function(ctx) {
+    var NOOP = function(){};
+
+    if (ctx.setLineDash) {
+      ctx.setLineDashOffset = function(off) { this.lineDashOffset = off; };
+    } else if (ctx.webkitLineDash !== undefined) {
+      ctx.setLineDash = function(dash) { this.webkitLineDash = dash; };
+      ctx.setLineDashOffset = function(off) { this.webkitLineDashOffset = off; };
+    } else if (ctx.mozDash !== undefined) {
+      ctx.setLineDash = function(dash) { this.mozDash = dash; };
+      ctx.setLineDashOffset = NOOP;
+    } else {
+      ctx.setLineDash = NOOP;
+      ctx.setLineDashOffset = NOOP;
+    }
+  },
+
   render: function() {
     var self = this;
     var activeAnimation = window.TWEEN && TWEEN.getAll().length > 0;
