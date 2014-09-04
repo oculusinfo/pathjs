@@ -15,6 +15,14 @@ Text.prototype = _.extend(Text.prototype, Node.prototype, {
     var x = this.x || 0;
     var y = this.y || 0;
 
+    if (this.rotation) {
+      ctx.save();
+      ctx.translate(x,y);
+      x = 0;
+      y = 0;
+      ctx.rotate(this.rotation);
+    }
+
     ctx.font = this.font || (this.fontSize + 'px ' + this.fontFamily) || '10px sans-serif';
     ctx.textAlign = this.textAlign || 'start';
     ctx.textBaseline = this.textBaseline || 'alphabetic';
@@ -29,6 +37,10 @@ Text.prototype = _.extend(Text.prototype, Node.prototype, {
       ctx.lineCap = this.lineCap || 'butt';
       ctx.lineJoin = this.lineJoin || 'miter';
       ctx.strokeText(this.text, x, y);
+    }
+
+    if (this.rotation) {
+      ctx.restore();
     }
   },
 
