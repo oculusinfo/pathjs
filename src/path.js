@@ -35,6 +35,10 @@ Path.prototype = _.extend(Path.prototype, Node.prototype, {
     ctx.save();
     ctx.translate(this.x || 0, this.y || 0);
 
+    if (this.opacity != null) {
+      ctx.globalAlpha = this.opacity;
+    }
+
     if (this.fillStyle) {
       ctx.fillStyle = this.fillStyle;
     }
