@@ -45,7 +45,7 @@ Node.prototype = {
 
     this.tween = new TWEEN.Tween(this)
       .to(attributes, transition.duration || 1000)
-      .onStop(function() {
+      .onComplete(function() {
         self.tween = null;
         if (transition.callback) {
           transition.callback(this, attributes);

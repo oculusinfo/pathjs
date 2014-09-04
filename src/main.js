@@ -47,9 +47,8 @@ _.extend(Path.prototype, Group.prototype, {
     // this.context.scale(pixelRatio,pixelRatio);
 
     if (activeAnimation) {
-      TWEEN.update();
-
       requestAnimationFrame(function() {
+        TWEEN.update();
         self.render();
       });
     }
