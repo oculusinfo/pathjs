@@ -30,17 +30,6 @@ Path.prototype = _.extend(Path.prototype, Node.prototype, {
   },
 
   draw: function(ctx) {
-    if (!this.visible) {
-      return;
-    }
-
-    ctx.save();
-    ctx.translate(this.x || 0, this.y || 0);
-
-    if (this.opacity != null) {
-      ctx.globalAlpha = this.opacity;
-    }
-
     if (this.fillStyle) {
       ctx.fillStyle = this.fillStyle;
     }
@@ -63,8 +52,6 @@ Path.prototype = _.extend(Path.prototype, Node.prototype, {
     if (this.fillStyle) {
       ctx.fill();
     }
-
-    ctx.restore();
   },
 
   pick: function(ctx, x, y, lx, ly) {

@@ -97,7 +97,47 @@ Node.prototype = {
     }
   },
 
+  render: function(ctx) {
+    if (!this.visible) {
+      return;
+    }
+
+    var x = this.x || 0;
+    var y = this.y || 0;
+    var scaleX = this.scaleX == null ? 1 : this.scaleX;
+    var scaleY = this.scaleY == null ? 1 : this.scaleY;
+    var transformed = !!x || !!y || !!this.rotation || scaleX !== 1 || scaleY !== 1 || this.opacity != null;
+
+    // TODO Investigate cost of always save/restore
+    if (transformed) {
+      ctx.save();
+    }
+
+    if (x || y) {
+      ctx.translate(x,y);
+    }
+
+    if (scaleX !== 1 || scaleY !== 1) {
+      ctx.scale(scaleX, scaleY);
+    }
+
+    if (this.rotation) {
+      ctx.rotate(this.rotation);
+    }
+
+    if (this.opacity != null) {
+      ctx.globalAlpha = this.opacity;
+    }
+
+    this.draw(ctx);
+
+    if (transformed) {
+      ctx.restore();
+    }
+  },
+
   draw: function(ctx) {
+    // template method
   },
 
   pick: function(ctx, x, y, lx, ly) {

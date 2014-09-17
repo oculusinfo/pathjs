@@ -61,19 +61,9 @@ Group.prototype = _.extend(Group.prototype, Node.prototype, {
 
   draw: function(ctx) {
     var children = this.children;
-
-    if (!this.visible) {
-      return;
-    }
-
-    ctx.save();
-    ctx.translate(this.x || 0, this.y || 0);
-
     for (var i=0, l=children.length; i<l; i++) {
-      children[i].draw(ctx);
+      children[i].render(ctx);
     };
-
-    ctx.restore();
   }
 });
 

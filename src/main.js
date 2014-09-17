@@ -48,7 +48,7 @@ _.extend(Path.prototype, Group.prototype, {
     }
   },
 
-  render: function() {
+  update: function() {
     var self = this;
     var activeAnimation = window.TWEEN && TWEEN.getAll().length > 0;
 
@@ -67,11 +67,11 @@ _.extend(Path.prototype, Group.prototype, {
     if (activeAnimation) {
       requestAnimationFrame(function() {
         TWEEN.update();
-        self.render();
+        self.update();
       });
     }
 
-    this.draw(this.context);
+    this.render(this.context);
   },
 
   // General handler for simple events (click, mousedown, etc)

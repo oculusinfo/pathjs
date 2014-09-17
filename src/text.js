@@ -8,40 +8,20 @@ var Text = function() {
 
 Text.prototype = _.extend(Text.prototype, Node.prototype, {
   draw: function(ctx) {
-    if (!this.visible) {
-      return;
-    }
-
-    var x = this.x || 0;
-    var y = this.y || 0;
-
-    if (this.rotation) {
-      // If a rotation exists apply transform through context, otherwise translate text in draw call
-      ctx.save();
-      ctx.translate(x,y);
-      x = 0;
-      y = 0;
-      ctx.rotate(this.rotation);
-    }
-
     ctx.font = this.font || '10px sans-serif';
     ctx.textAlign = this.textAlign || 'start';
     ctx.textBaseline = this.textBaseline || 'alphabetic';
 
     if (this.fillStyle) {
       ctx.fillStyle = this.fillStyle;
-      ctx.fillText(this.text, x, y);
+      ctx.fillText(this.text, 0, 0);
     }
     if (this.strokeStyle) {
       ctx.strokeStyle = this.strokeStyle;
       ctx.lineWidth = this.lineWidth || 1;
       ctx.lineCap = this.lineCap || 'butt';
       ctx.lineJoin = this.lineJoin || 'miter';
-      ctx.strokeText(this.text, x, y);
-    }
-
-    if (this.rotation) {
-      ctx.restore();
+      ctx.strokeText(this.text, 0, 0);
     }
   },
 

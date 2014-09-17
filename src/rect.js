@@ -8,18 +8,12 @@ var Rect = function() {
 
 Rect.prototype = _.extend(Rect.prototype, Node.prototype, {
   draw: function(ctx) {
-    if (!this.visible) {
-      return;
-    }
-
-    var x = this.x || 0;
-    var y = this.y || 0;
     var width = this.width || 0;
     var height = this.height || 0;
 
     if (this.fillStyle) {
       ctx.fillStyle = this.fillStyle;
-      ctx.fillRect(x, y, width, height);
+      ctx.fillRect(0, 0, width, height);
     }
     if (this.strokeStyle) {
       ctx.strokeStyle = this.strokeStyle;
@@ -29,7 +23,7 @@ Rect.prototype = _.extend(Rect.prototype, Node.prototype, {
       ctx.miterLimit = this.miterLimit || 10;
       ctx.setLineDash(this.lineDash || NONE);
       ctx.setLineDashOffset(this.lineDashOffset || 0);
-      ctx.strokeRect(x, y, width, height);
+      ctx.strokeRect(0, 0, width, height);
     }
   },
 
