@@ -16,6 +16,7 @@ Text.prototype = _.extend(Text.prototype, Node.prototype, {
     var y = this.y || 0;
 
     if (this.rotation) {
+      // If a rotation exists apply transform through context, otherwise translate text in draw call
       ctx.save();
       ctx.translate(x,y);
       x = 0;
@@ -23,7 +24,7 @@ Text.prototype = _.extend(Text.prototype, Node.prototype, {
       ctx.rotate(this.rotation);
     }
 
-    ctx.font = this.font || (this.fontSize + 'px ' + this.fontFamily) || '10px sans-serif';
+    ctx.font = this.font || '10px sans-serif';
     ctx.textAlign = this.textAlign || 'start';
     ctx.textBaseline = this.textBaseline || 'alphabetic';
 
@@ -53,6 +54,7 @@ Text.prototype = _.extend(Text.prototype, Node.prototype, {
     var y = this.y || 0;
     var width = ctx.measureText(this.text);
     // XXX Height
+    // XXX Rotation
     if (lx >= x && lx < x+width && ly >= y && ly < y+10) {
       return this;
     }

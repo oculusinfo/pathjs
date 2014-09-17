@@ -26,6 +26,9 @@ Rect.prototype = _.extend(Rect.prototype, Node.prototype, {
       ctx.lineWidth = this.lineWidth || 1;
       ctx.lineCap = this.lineCap || 'butt';
       ctx.lineJoin = this.lineJoin || 'miter';
+      ctx.miterLimit = this.miterLimit || 10;
+      ctx.setLineDash(this.lineDash || NONE);
+      ctx.setLineDashOffset(this.lineDashOffset || 0);
       ctx.strokeRect(x, y, width, height);
     }
   },

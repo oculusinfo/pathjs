@@ -3,6 +3,8 @@ var Node = require('./node');
 var svg = require('./svg');
 
 
+var NONE = [];
+
 
 var Path = function() {
   Node.apply(this, arguments);
@@ -48,6 +50,9 @@ Path.prototype = _.extend(Path.prototype, Node.prototype, {
       ctx.lineWidth = this.lineWidth || 1;
       ctx.lineCap = this.lineCap || 'butt';
       ctx.lineJoin = this.lineJoin || 'miter';
+      ctx.miterLimit = this.miterLimit || 10;
+      ctx.setLineDash(this.lineDash || NONE);
+      ctx.setLineDashOffset(this.lineDashOffset || 0);
     }
 
     this.sketch(ctx);
