@@ -13,9 +13,12 @@ var Path = function(element) {
 
   this.el = element;
   this.context = element.getContext("2d");
+
+  // Add helper polyfills to context instance
   this._polyfill(this.context);
 
   // Offset by 1/2 pixel to align with pixel edges
+  // http://diveintohtml5.info/canvas.html#pixel-madness
   this.x = 0.5;
   this.y = 0.5;
 
@@ -50,9 +53,8 @@ _.extend(Path.prototype, Group.prototype, {
 
   update: function() {
     var self = this;
-    var activeAnimation = window.TWEEN && TWEEN.getAll().length > 0;
 
-    // Update size + clear
+    // Update size to equal displayed pixel size + clear
     var width = this.el.clientWidth;
     var height = this.el.clientHeight;
     this.context.canvas.width = width;
@@ -64,7 +66,8 @@ _.extend(Path.prototype, Group.prototype, {
     // this.context.canvas.height = height*pixelRatio;
     // this.context.scale(pixelRatio,pixelRatio);
 
-    if (activeAnimation) {
+    // Active animations? schedule tween update + render on next frame
+    if (window.TWEEN && TWEEN.getAll().length > 0) {
       requestAnimationFrame(function() {
         TWEEN.update();
         self.update();
@@ -102,6 +105,7 @@ _.extend(Path.prototype, Group.prototype, {
     if (hit) {
       hit.trigger('mousemove', e);
     }
+    // TODO Handle mouse leaving canvas
   }
 });
 
@@ -110,17 +114,17 @@ _.extend(Path.prototype, Group.prototype, {
 // STATIC
 
 // Create
-var attributes = {
+var namespaceConstructors = {
   rect: require('./rect'),
   path: require('./path'),
   text: require('./text'),
   group: Group
 };
 
-for (attr in attributes) {
+for (attr in namespaceConstructors) {
   Path[attr] = (function(attr) {
     return function(props) {
-      return new attributes[attr](props);
+      return new namespaceConstructors[attr](props);
     };
   }(attr));
 }
