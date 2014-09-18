@@ -27,17 +27,11 @@ Rect.prototype = _.extend(Rect.prototype, Node.prototype, {
     }
   },
 
-  pick: function(ctx, x, y, lx, ly) {
-    if (!this.visible) {
-      return;
-    }
-
-    var x = this.x || 0;
-    var y = this.y || 0;
+  hitTest: function(ctx, x, y, lx, ly) {
     var width = this.width || 0;
     var height = this.height || 0;
 
-    if (lx >= x && lx < x+width && ly >= y && ly < y+height) {
+    if (lx >= 0 && lx < width && ly >= 0 && ly < height) {
       return this;
     }
   }

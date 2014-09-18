@@ -54,27 +54,15 @@ Path.prototype = _.extend(Path.prototype, Node.prototype, {
     }
   },
 
-  pick: function(ctx, x, y, lx, ly) {
-    var isHit = false;
-
-    if (!this.visible) {
-      return;
-    }
-
-    ctx.save();
-    ctx.translate(this.x || 0, this.y || 0);
-
+  hitTest: function(ctx, x, y, lx, ly) {
     this.sketch(ctx);
 
-    if (this.fillStyle) {
-      isHit = ctx.isPointInPath(x,y);
+    if (this.fillStyle && ctx.isPointInPath(x,y)) {
+      return this;
     }
-    if (!isHit && this.stroke) {
-      isHit = ctx.isPointInStroke(x,y);
+    if (this.stroke && ctx.isPointInStroke(x,y)) {
+      return this;
     }
-
-    ctx.restore();
-    return isHit && this;
   }
 });
 

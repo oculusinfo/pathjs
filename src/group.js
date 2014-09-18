@@ -31,31 +31,14 @@ Group.prototype = _.extend(Group.prototype, Node.prototype, {
     }
   },
 
-  pick: function(ctx, x, y, lx, ly) {
+  hitTest: function(ctx, x, y, lx, ly) {
     var children = this.children;
-    var tx = this.x || 0;
-    var ty = this.y || 0;
     var result;
 
-    if (!this.visible) {
-      return;
-    }
-
-    ctx.save();
-    ctx.translate(tx, ty);
-
-    // Apply transform to local coordinate values
-    lx -= tx;
-    ly -= ty;
-
-    for (var i=children.length-1; i>=0; i--) {
+    for (var i=children.length-1; i>=0 && !result; i--) {
       result = children[i].pick(ctx, x, y, lx, ly);
-      if (result) {
-        break;
-      }
     }
 
-    ctx.restore();
     return result;
   },
 

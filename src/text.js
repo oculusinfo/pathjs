@@ -25,17 +25,12 @@ Text.prototype = _.extend(Text.prototype, Node.prototype, {
     }
   },
 
-  pick: function(ctx, x, y, lx, ly) {
-    if (!this.visible) {
-      return;
-    }
-
-    var x = this.x || 0;
-    var y = this.y || 0;
+  hitTest: function(ctx, x, y, lx, ly) {
+    // XXX Size calculations - font, font-size, height
     var width = ctx.measureText(this.text);
-    // XXX Height
-    // XXX Rotation
-    if (lx >= x && lx < x+width && ly >= y && ly < y+10) {
+    var height = 10;
+
+    if (lx >= 0 && lx < width && ly >= 0 && ly < height) {
       return this;
     }
   }

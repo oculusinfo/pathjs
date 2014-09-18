@@ -136,11 +136,64 @@ Node.prototype = {
     }
   },
 
+  pick: function(ctx, x, y, lx, ly) {
+    if (!this.visible) {
+      return;
+    }
+
+    var result = null;
+    var s, c, temp;
+
+    var tx = this.x || 0;
+    var ty = this.y || 0;
+    var scaleX = this.scaleX == null ? 1 : this.scaleX;
+    var scaleY = this.scaleY == null ? 1 : this.scaleY;
+    var transformed = !!tx || !!ty || !!this.rotation || scaleX !== 1 || scaleY !== 1 || this.opacity != null;
+
+    // TODO Investigate cost of always save/restore
+    if (transformed) {
+      ctx.save();
+    }
+
+    if (tx || ty) {
+      ctx.translate(tx,ty);
+      // Reverse translation on picked point
+      lx -= tx;
+      ly -= ty;
+    }
+
+    if (scaleX !== 1 || scaleY !== 1) {
+      ctx.scale(scaleX, scaleY);
+      // Reverse scale
+      lx /= scaleX;
+      ly /= scaleY;
+    }
+
+    if (this.rotation) {
+      ctx.rotate(this.rotation);
+      // Reverse rotation
+      s = Math.sin(-this.rotation);
+      c = Math.cos(-this.rotation);
+      temp = c*lx - s*ly;
+      ly = s*lx + c*ly;
+      lx = temp;
+    }
+
+    result = this.hitTest(ctx, x, y, lx, ly);
+
+    if (transformed) {
+      ctx.restore();
+    }
+
+    return result;
+  },
+
   draw: function(ctx) {
     // template method
   },
 
-  pick: function(ctx, x, y, lx, ly) {
+  hitTest: function(ctx, x, y, lx, ly) {
+    // template method
   }
 }
 
