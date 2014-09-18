@@ -15,7 +15,7 @@ ImageNode.prototype = _.extend(ImageNode.prototype, Node.prototype, {
     var height = this.height || 0;
 
     // Image has changed, reset state
-    if (this._image && this._image.src !== this.url) {
+    if (this._image && this._image.rawSrc !== this.src) {
       this._image = null;
     }
 
@@ -29,7 +29,8 @@ ImageNode.prototype = _.extend(ImageNode.prototype, Node.prototype, {
         self._image.loaded = true;
         self.trigger('update');
       };
-      this._image.src = this.url;
+      this._image.rawSrc = this.src;
+      this._image.src = this.src;
     }
   },
 
