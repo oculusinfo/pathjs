@@ -58,6 +58,7 @@ Group.prototype = _.extend(Group.prototype, Node.prototype, {
     var children = this.children;
 
     if (this.clip) {
+      ctx.save();
       ctx.beginPath();
       ctx.rect(this.clip.x, this.clip.y, this.clip.width, this.clip.height);
       ctx.clip();
@@ -65,7 +66,11 @@ Group.prototype = _.extend(Group.prototype, Node.prototype, {
 
     for (var i=0, l=children.length; i<l; i++) {
       children[i].render(ctx);
-    };
+    }
+
+    if (this.clip) {
+      ctx.restore();
+    }
   }
 });
 
