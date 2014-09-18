@@ -1,6 +1,8 @@
 var _ = require('./util');
 var Node = require('./node');
 
+var NONE = [];
+
 var Rect = function() {
   Node.apply(this, arguments);
 };
