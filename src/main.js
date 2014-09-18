@@ -22,14 +22,24 @@ var Path = function(element) {
   this.x = 0.5;
   this.y = 0.5;
 
-  // Register event listeners on canvas that use picker to hittest
+  // Bind members for convenient callback
+  this.update = this.update.bind(this);
   this._handle = this._handle.bind(this);
   this._mousemove = this._mousemove.bind(this);
 
+  // Register event listeners on canvas that use picker to hittest
   ['click', 'dblclick', 'mousedown', 'mouseup'].forEach(function(type) {
     self.el.addEventListener(type, self._handle);
   });
   this.el.addEventListener('mousemove', this._mousemove);
+
+  // Listen for update requests from scenegraph, defer by a frame, coalesce
+  this._pendingUpdate = null;
+  this.on('update', function() {
+    if (!self._pendingUpdate) {
+      self._pendingUpdate = requestAnimationFrame( self.update );
+    }
+  });
 };
 
 
@@ -66,9 +76,12 @@ _.extend(Path.prototype, Group.prototype, {
     // this.context.canvas.height = height*pixelRatio;
     // this.context.scale(pixelRatio,pixelRatio);
 
+    this._pendingUpdate = null;
+
     // Active animations? schedule tween update + render on next frame
     if (window.TWEEN && TWEEN.getAll().length > 0) {
-      requestAnimationFrame(function() {
+      // XXX Could be an existing pending update
+      this._pendingUpdate = requestAnimationFrame(function() {
         TWEEN.update();
         self.update();
       });
@@ -118,6 +131,7 @@ var namespaceConstructors = {
   rect: require('./rect'),
   path: require('./path'),
   text: require('./text'),
+  image: require('./image'),
   group: Group
 };
 
