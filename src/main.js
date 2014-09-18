@@ -41,24 +41,34 @@ var Path = function(element) {
       self._pendingUpdate = polyfill.requestAnimationFrame( self.update );
     }
   });
+
+  // Resize to current DOM-specified sizing
+  this.resize();
 };
 
 
 _.extend(Path.prototype, Group.prototype, {
+  resize: function(w, h) {
+    this.width = w || this.el.clientWidth;
+    this.height = h || this.el.clientHeight;
+
+    this.el.style.width = this.width + 'px';
+    this.el.style.height = this.height + 'px';
+  },
+
+
   update: function() {
     var self = this;
+    // TODO this may not be reliable on mobile
+    var devicePixelRatio = window.devicePixelRatio || 1;
 
     // Update size to equal displayed pixel size + clear
-    var width = this.el.clientWidth;
-    var height = this.el.clientHeight;
-    this.context.canvas.width = width;
-    this.context.canvas.height = height;
-
-    // TODO pixel ratio support
-    // var pixelRatio = 2;
-    // this.context.canvas.width = width*pixelRatio;
-    // this.context.canvas.height = height*pixelRatio;
-    // this.context.scale(pixelRatio,pixelRatio);
+    this.context.canvas.width = this.width * devicePixelRatio;
+    this.context.canvas.height = this.height * devicePixelRatio;
+    if (devicePixelRatio != 1) {
+      this.context.save();
+      this.context.scale(devicePixelRatio,devicePixelRatio);
+    }
 
     this._pendingUpdate = null;
 
@@ -72,6 +82,10 @@ _.extend(Path.prototype, Group.prototype, {
     }
 
     this.render(this.context);
+
+    if (devicePixelRatio != 1) {
+      this.context.restore();
+    }
   },
 
   // General handler for simple events (click, mousedown, etc)
