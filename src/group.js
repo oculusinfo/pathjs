@@ -33,7 +33,15 @@ Group.prototype = _.extend(Group.prototype, Node.prototype, {
 
   hitTest: function(ctx, x, y, lx, ly) {
     var children = this.children;
+    var clip = this.clip;
     var result;
+
+    if (clip) {
+      if (lx < clip.x || lx > clip.x+clip.width && ly < clip.y && ly > clip.y+clip.height) {
+        // Pick point is out of clip rect
+        return;
+      }
+    }
 
     for (var i=children.length-1; i>=0 && !result; i--) {
       result = children[i].pick(ctx, x, y, lx, ly);
@@ -44,6 +52,13 @@ Group.prototype = _.extend(Group.prototype, Node.prototype, {
 
   draw: function(ctx) {
     var children = this.children;
+
+    if (this.clip) {
+      ctx.beginPath();
+      ctx.rect(this.clip.x, this.clip.y, this.clip.width, this.clip.height);
+      ctx.clip();
+    }
+
     for (var i=0, l=children.length; i<l; i++) {
       children[i].render(ctx);
     };
