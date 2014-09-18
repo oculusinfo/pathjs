@@ -14,11 +14,6 @@ ImageNode.prototype = _.extend(ImageNode.prototype, Node.prototype, {
     var width = this.width || 0;
     var height = this.height || 0;
 
-    // Image has changed, reset state
-    if (this._image && this._image.rawSrc !== this.src) {
-      this._image = null;
-    }
-
     if (this._image && this._image.loaded) {
       // Image
       ctx.drawImage(this._image, 0, 0, width, height);
@@ -26,10 +21,12 @@ ImageNode.prototype = _.extend(ImageNode.prototype, Node.prototype, {
       self = this;
       this._image = new Image();
       this._image.onload = function() {
-        self._image.loaded = true;
-        self.trigger('update');
+        // Only render scene if loaded image is still part of it
+        if (this === self._image) {
+          self._image.loaded = true;
+          self.trigger('update');
+        }
       };
-      this._image.rawSrc = this.src;
       this._image.src = this.src;
     }
   },
@@ -40,6 +37,19 @@ ImageNode.prototype = _.extend(ImageNode.prototype, Node.prototype, {
 
     if (lx >= 0 && lx < width && ly >= 0 && ly < height) {
       return this;
+    }
+  }
+});
+
+
+Object.defineProperty(ImageNode.prototype, 'src', {
+  get: function() {
+    return this._src;
+  },
+  set: function(value) {
+    if (this._src !== value) {
+      this._src = value;
+      this._image = null;
     }
   }
 });

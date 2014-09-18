@@ -13,18 +13,11 @@ var Path = function() {
 
 Path.prototype = _.extend(Path.prototype, Node.prototype, {
 
-  attr: function(attributes) {
-    Node.prototype.attr.call(this, attributes);
-    if (attributes.path) {
-      this.commandCache = null;
-    }
-    return this;
-  },
-
   // Much from Fabric.js - https://github.com/kangax/fabric.js/blob/master/src/shapes/path.class.js
   sketch: function(ctx) {
-    if (this.path && this.path.length > 0) {
-      var pathCommands = this.commandCache || (this.commandCache = svg.parse(this.path));
+    var path = this.path;
+    if (path && path.length > 0) {
+      var pathCommands = this._commandCache || (this._commandCache = svg.parse(path));
       svg.render(ctx, pathCommands);
     }
   },
@@ -62,6 +55,19 @@ Path.prototype = _.extend(Path.prototype, Node.prototype, {
     }
     if (this.stroke && ctx.isPointInStroke(x,y)) {
       return this;
+    }
+  }
+});
+
+
+Object.defineProperty(Path.prototype, 'path', {
+  get: function() {
+    return this._path;
+  },
+  set: function(value) {
+    if (this._path !== value) {
+      this._path = value;
+      this._commandCache = null;
     }
   }
 });
