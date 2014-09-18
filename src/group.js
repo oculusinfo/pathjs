@@ -10,9 +10,13 @@ var Group = function() {
 
 Group.prototype = _.extend(Group.prototype, Node.prototype, {
 
-  add: function(child) {
+  add: function(child, index) {
     child.parent = this;
-    this.children.push(child);
+    if (index != null && index <= this.children.length) {
+      this.children.splice(index, 0, child);
+    } else {
+      this.children.push(child);
+    }
     return this;
   },
 
