@@ -1,4 +1,5 @@
 var _ = require('./util');
+var polyfill = require('./polyfills');
 var Group = require('./group');
 
 
@@ -15,7 +16,7 @@ var Path = function(element) {
   this.context = element.getContext("2d");
 
   // Add helper polyfills to context instance
-  this._polyfill(this.context);
+  polyfill.dashSupport(this.context);
 
   // Offset by 1/2 pixel to align with pixel edges
   // http://diveintohtml5.info/canvas.html#pixel-madness
@@ -37,30 +38,13 @@ var Path = function(element) {
   this._pendingUpdate = null;
   this.on('update', function() {
     if (!self._pendingUpdate) {
-      self._pendingUpdate = requestAnimationFrame( self.update );
+      self._pendingUpdate = polyfill.requestAnimationFrame( self.update );
     }
   });
 };
 
 
 _.extend(Path.prototype, Group.prototype, {
-  _polyfill: function(ctx) {
-    var NOOP = function(){};
-
-    if (ctx.setLineDash) {
-      ctx.setLineDashOffset = function(off) { this.lineDashOffset = off; };
-    } else if (ctx.webkitLineDash !== undefined) {
-      ctx.setLineDash = function(dash) { this.webkitLineDash = dash; };
-      ctx.setLineDashOffset = function(off) { this.webkitLineDashOffset = off; };
-    } else if (ctx.mozDash !== undefined) {
-      ctx.setLineDash = function(dash) { this.mozDash = dash; };
-      ctx.setLineDashOffset = NOOP;
-    } else {
-      ctx.setLineDash = NOOP;
-      ctx.setLineDashOffset = NOOP;
-    }
-  },
-
   update: function() {
     var self = this;
 
@@ -81,7 +65,7 @@ _.extend(Path.prototype, Group.prototype, {
     // Active animations? schedule tween update + render on next frame
     if (window.TWEEN && TWEEN.getAll().length > 0) {
       // XXX Could be an existing pending update
-      this._pendingUpdate = requestAnimationFrame(function() {
+      this._pendingUpdate = polyfill.requestAnimationFrame(function() {
         TWEEN.update();
         self.update();
       });
