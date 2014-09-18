@@ -26,6 +26,7 @@ scene.update();
 
 SVG path support
 ```
+// todo
 ```
 
 
@@ -79,6 +80,12 @@ scene.add(group);
 group.add(rect);
 ```
 
+### To Do
+
+ - Implement bounding box calculation to improve picking speed
+ - Drag event support
+ - Documentation
+ - Unit tests
 
 ### Notes
 

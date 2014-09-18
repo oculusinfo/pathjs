@@ -2,7 +2,10 @@ var _ = require('./util');
 var polyfill = require('./polyfills');
 var Group = require('./group');
 
-
+/**
+ * Constructs a new scenegraph root element. Expects a `canvas` HTML
+ * element.
+ */
 var Path = function(element) {
   // Autoinstantiate
   if (!(this instanceof Path)) {
@@ -48,6 +51,15 @@ var Path = function(element) {
 
 
 _.extend(Path.prototype, Group.prototype, {
+  /**
+   * Resize or update the size of the canvas. Calling this function will fix
+   * the css-style-specified size of the canvas element. Call `update()`
+   * to cause the canvas to rerender at the new size.
+   *
+   * Strict sizing is necessary to set the canvas width/height pixel count
+   * to the correct value for the canvas element DOM size and device pixel
+   * ratio.
+   */
   resize: function(w, h) {
     this.width = w || this.el.clientWidth;
     this.height = h || this.el.clientHeight;
@@ -56,7 +68,11 @@ _.extend(Path.prototype, Group.prototype, {
     this.el.style.height = this.height + 'px';
   },
 
-
+  /**
+   * Causes the canvas to render synchronously. If any animations are active/pending
+   * this will kick off a series of automatic updates until the animations all
+   * complete.
+   */
   update: function() {
     var self = this;
     // TODO this may not be reliable on mobile
@@ -124,7 +140,7 @@ _.extend(Path.prototype, Group.prototype, {
 
 // STATIC
 
-// Create
+// Add library constructs to namespace
 var namespaceConstructors = {
   rect: require('./rect'),
   path: require('./path'),

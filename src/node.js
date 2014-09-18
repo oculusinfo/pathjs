@@ -2,6 +2,9 @@ var _ = require('./util');
 
 var ID = 0;
 
+/**
+ * Base Node object for all scenegraph objects
+ */
 var Node = function(attributes) {
   this.id = ID++;
   this.parent = null;
@@ -12,6 +15,9 @@ var Node = function(attributes) {
 };
 
 Node.prototype = {
+  /**
+   * Simple
+   */
   data: function(data) {
     if (arguments.length === 0) {
       return this._data;
@@ -20,11 +26,26 @@ Node.prototype = {
     }
   },
 
+  /**
+   * Bulk sets a group of node properties, takes a map of property names
+   * to values. Functionally equivalent to setting each property via
+   * `node.propertyName = value`
+   */
   attr: function(attributes) {
     _.extend(this, attributes);
     return this;
   },
 
+  /**
+   * Queues a set of node properties for an animated transition. Only
+   * numeric properties can be animated. The length of the transition
+   * is specified in the transition property, defaults to 1 second. An
+   * optional callback can be provided which will be called on animation
+   * completion.
+   *
+   * Calling `update()` on the scene root will trigger the start of all
+   * queued animations and cause them to run (and render) to completion.
+   */
   tweenAttr: function(attributes, transition) {
     var self = this;
     var key, statics;
@@ -54,14 +75,33 @@ Node.prototype = {
       .start();
   },
 
+  /**
+   * Adds an event handler to this node. For example:
+   * ```
+   * node.on('click', function(event) {
+   *   // do something
+   * });
+   * ```
+   * An event object will be passed to the handler when the event
+   * is triggered. The event object will be a standard JavaScript
+   * event and will contain a `targetNode` property containing the
+   * node that was the source of the event. Events bubble up the
+   * scenegraph until handled. Handlers returning a truthy value
+   * signal that the event has been handled.
+   */
   on: function(type, handler) {
     var handlers = this.handlers[type];
     if (!handlers) {
       handlers = this.handlers[type] = [];
     }
     handlers.push(handler);
+    return this;
   },
 
+  /**
+   * Removes an event handler of the given type. If no handler is
+   * provided, all handlers of the type will be removed.
+   */
   off: function(type, handler) {
     if (!handler) {
       this.handlers[type] = [];
@@ -72,8 +112,13 @@ Node.prototype = {
         handlers.splice(idx, 1);
       }
     }
+    return this;
   },
 
+  /**
+   * Triggers an event and begins bubbling. Returns truthy if the
+   * event was handled.
+   */
   trigger: function(type, event) {
     var handled = false;
     var handlers = this.handlers[type];
@@ -91,12 +136,18 @@ Node.prototype = {
     return handled;
   },
 
+  /**
+   * Removes this node from its parent
+   */
   remove: function() {
     if (this.parent) {
       this.parent.remove(this);
     }
   },
 
+  /**
+   * Internal: renders the node given the context
+   */
   render: function(ctx) {
     if (!this.visible) {
       return;
@@ -136,6 +187,10 @@ Node.prototype = {
     }
   },
 
+  /**
+   * Internal: tests for pick hit given context, global and local
+   * coordinate system transformed pick coordinates.
+   */
   pick: function(ctx, x, y, lx, ly) {
     if (!this.visible) {
       return;
@@ -188,10 +243,18 @@ Node.prototype = {
     return result;
   },
 
+  /**
+   * Template method for derived objects to actually perform draw operations.
+   * The calling `render` call handles general transforms and opacity.
+   */
   draw: function(ctx) {
     // template method
   },
 
+  /**
+   * Template method for derived objects to test if they (or child) is hit by
+   * the provided pick coordinate. If hit, return object that was hit.
+   */
   hitTest: function(ctx, x, y, lx, ly) {
     // template method
   }
