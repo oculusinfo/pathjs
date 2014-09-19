@@ -33,7 +33,7 @@ gulp watch
 
 
 Basic usage
-```
+```javascript
 var canvas = document.getElementById('my-canvas');
 var scene = path(canvas);
 
@@ -52,13 +52,13 @@ scene.update();
 
 
 SVG path support
-```
+```javascript
 // todo
 ```
 
 
 Picking and data support
-```
+```javascript
 rect.data(myDataObj);
 rect.on('click', function(e) {
 	console.log('My data: ' + e.targetNode.data());
@@ -67,7 +67,7 @@ rect.on('click', function(e) {
 
 
 Mouse enter/leave detection, modify properties directly
-```
+```javascript
 rect.on('mouseover', function(e) {
 	rect.fillStyle = '#f00';
 	scene.update();
@@ -80,7 +80,7 @@ rect.on('mouseout', function(e) {
 
 
 Animation support for numeric attributes
-```
+```javascript
 rect.attr({
 	strokeWidth: 5
 }).tweenAttr({
@@ -96,7 +96,7 @@ scene.update();
 
 
 Groups and basic transform support
-```
+```javascript
 var group = path.group({
 	x: -100,
 	y: 200,
