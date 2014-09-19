@@ -122,7 +122,9 @@ _.extend(Path.prototype, Group.prototype, {
     // Manage mouseout/mouseover
     if (this._lastover != hit) {
       if (this._lastover) {
+        e.targetNode = this._lastover;
         this._lastover.trigger('mouseout', e);
+        e.targetNode = hit;
       }
       this._lastover = hit;
       if (hit) {
