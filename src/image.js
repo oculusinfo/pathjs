@@ -22,12 +22,14 @@ var ImageNode = function() {
 ImageNode.prototype = _.extend(ImageNode.prototype, Node.prototype, {
   draw: function(ctx) {
     var self;
-    var width = this.width || 0;
-    var height = this.height || 0;
 
     if (this._image && this._image.loaded) {
       // Image
-      ctx.drawImage(this._image, 0, 0, width, height);
+      if (this.width != null || this.height != null) {
+        ctx.drawImage(this._image, 0, 0, this.width, this.height);
+      } else {
+        ctx.drawImage(this._image, 0, 0);
+      }
     } else if (!this._image) {
       self = this;
       this._image = new Image();
@@ -43,8 +45,8 @@ ImageNode.prototype = _.extend(ImageNode.prototype, Node.prototype, {
   },
 
   hitTest: function(ctx, x, y, lx, ly) {
-    var width = this.width || 0;
-    var height = this.height || 0;
+    var width = this.width || (this._image && this._image.width);
+    var height = this.height || (this._image && this._image.height);
 
     if (lx >= 0 && lx < width && ly >= 0 && ly < height) {
       return this;
