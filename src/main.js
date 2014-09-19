@@ -120,6 +120,7 @@ _.extend(Path.prototype, Group.prototype, {
       e.targetNode = hit;
     }
     // Manage mouseout/mouseover
+    // TODO create new event objects with correct event type
     if (this._lastover != hit) {
       if (this._lastover) {
         e.targetNode = this._lastover;

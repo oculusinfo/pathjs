@@ -2,6 +2,9 @@
 
 > A minimal retained mode wrapper with picking support around the Canvas API
 
+More to come...
+
+
 ### Usage
 
 
@@ -54,7 +57,9 @@ rect.on('mouseout', function(e) {
 
 Animation support for numeric attributes
 ```
-rect.tweenAttr({
+rect.attr({
+	strokeWidth: 5
+}).tweenAttr({
 	strokeWidth: 10
 }, {
 	duration: 1000,
