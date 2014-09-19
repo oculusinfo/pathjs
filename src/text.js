@@ -1,6 +1,16 @@
 var _ = require('./util');
 var Node = require('./node');
 
+
+/**
+ * Text Node
+ *
+ * Properties inherited from Node: visible, x, y, rotation, scaleX, scaleY, opacity
+ *
+ * font: Canvas-API formatted font string, for example 'bold 12px serif'
+ * textAlign, textBaseline: as specified in the HTML5 Canvas API
+ * fillStyle, strokeStyle, lineWidth, lineCap, lineJoin: as specified in the HTML5 Canvas API
+ */
 var Text = function() {
   Node.apply(this, arguments);
 };

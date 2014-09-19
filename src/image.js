@@ -1,6 +1,17 @@
 var _ = require('./util');
 var Node = require('./node');
 
+/**
+ * Raster Image Node
+ *
+ * Properties inherited from Node: visible, x, y, rotation, scaleX, scaleY, opacity
+ *
+ * src: url (relative or fully qualified) from which to load image
+ * width: width of the rendered representation of the image (in pixels).
+ *   If unset/null, the natural width of the image will be used
+ * height: height of the rendered representation of the image (in pixels).
+ *   If unset/null, the natural height of the image will be used
+ */
 var ImageNode = function() {
   Node.apply(this, arguments);
 

@@ -1,6 +1,20 @@
 var _ = require('./util');
 var Node = require('./node');
 
+
+/**
+ * Group (container) node in the scenegraph. Has no visual representation.
+ *
+ * Properties inherited from Node: visible, x, y, rotation, scaleX, scaleY, opacity
+ *
+ * clip: {x, y, width, height} Specifies an optional rectangular clipping rectangle
+ *   that applies to all child nodes.
+ *
+ * Note: applying opacity to Groups is supported but not cummulative. Specifically,
+ * if a child node sets opacity it will override the group-level opacity, not
+ * accumulate it. As such the group opacity simply supplies the default opacity
+ * to child nodes.
+ */
 var Group = function() {
   Node.apply(this, arguments);
 

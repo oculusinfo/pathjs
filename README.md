@@ -82,6 +82,8 @@ group.add(rect);
 
 ### To Do
 
+ - Stroke vs fill picking on Rect
+ - Proper font-height calculation for picking
  - Implement bounding box calculation to improve picking speed
  - Drag event support
  - Documentation

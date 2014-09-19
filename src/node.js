@@ -4,6 +4,14 @@ var ID = 0;
 
 /**
  * Base Node object for all scenegraph objects
+ *
+ * id: non-visual, unique value for all nodes
+ * visible: if false, this node (and descendents) will not render nor pick
+ * x: the x position (translation) applied to this node
+ * y: the y position (translation) applied to this node
+ * rotation: rotation in radians applied to this node and any descendents
+ * scaleX, scaleY: x and y scale applied to this node and any descendents
+ * opacity: the global opacity [0,1] of this node
  */
 var Node = function(attributes) {
   this.id = ID++;
