@@ -24,7 +24,12 @@ var Group = function() {
 
 Group.prototype = _.extend(Group.prototype, Node.prototype, {
 
-  add: function(child, index) {
+  /**
+   * Adds a child node to this group, optionally including the `index`
+   * at which to insert. If `index` is omitted, the node is added at the
+   * end (visually on top) of the exist list of children.
+   */
+  addChild: function(child, index) {
     child.parent = this;
     if (index != null && index <= this.children.length) {
       this.children.splice(index, 0, child);
@@ -34,20 +39,20 @@ Group.prototype = _.extend(Group.prototype, Node.prototype, {
     return this;
   },
 
-  remove: function(child) {
-    if (child) {
-      // Remove child
-      var idx = this.children.indexOf(child);
-      if (idx >= 0) {
-        this.children.splice(idx, 1);
-        child.parent = null;
-        return child;
-      }
-    } else {
-      // Remove self
-      return Node.prototype.remove.call(this);
+  /**
+   * Removes a specified child from this group. If the child exists in
+   * this group it is removed and returned.
+   */
+  removeChild: function(child) {
+    // Remove child
+    var idx = this.children.indexOf(child);
+    if (idx >= 0) {
+      this.children.splice(idx, 1);
+      child.parent = null;
+      return child;
     }
   },
+
 
   hitTest: function(ctx, x, y, lx, ly) {
     var children = this.children;
@@ -61,6 +66,8 @@ Group.prototype = _.extend(Group.prototype, Node.prototype, {
       }
     }
 
+    // Defer picking to children - start at top of stack (end of child list)
+    // and work backwards, exit early if hit found
     for (var i=children.length-1; i>=0 && !result; i--) {
       result = children[i].pick(ctx, x, y, lx, ly);
     }
@@ -78,6 +85,7 @@ Group.prototype = _.extend(Group.prototype, Node.prototype, {
       ctx.clip();
     }
 
+    // Render children from bottom-up
     for (var i=0, l=children.length; i<l; i++) {
       children[i].render(ctx);
     }
