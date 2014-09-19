@@ -68,7 +68,7 @@ Path.prototype = _.extend(Path.prototype, Node.prototype, {
     if (this.fillStyle && ctx.isPointInPath(x,y)) {
       return this;
     }
-    if (this.stroke && ctx.isPointInStroke(x,y)) {
+    if (this.strokeStyle && ctx.isPointInStroke(x,y)) {
       return this;
     }
   }
