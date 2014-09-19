@@ -1,11 +1,15 @@
-var gulp = require('gulp');
-var browserify = require('browserify');
-var source = require('vinyl-source-stream');
-var connect = require('connect');
-var http = require('http');
-var livereload = require('gulp-livereload');
-var connectreload = require('connect-livereload');
-var serveStatic = require('serve-static');
+var gulp = require('gulp'),
+    browserify = require('browserify'),
+    uglify = require('gulp-uglify'),
+    buffer = require('vinyl-buffer'),
+    source = require('vinyl-source-stream'),
+    rename = require('gulp-rename'),
+    connect = require('connect'),
+    http = require('http'),
+    livereload = require('gulp-livereload'),
+    connectreload = require('connect-livereload'),
+    serveStatic = require('serve-static');
+
 
 var config = {
   src: 'src',
@@ -15,7 +19,6 @@ var config = {
   livereloadPort: 35729
 };
 
-
 gulp.task('compile', function() {
   return browserify('./'+config.src+'/main.js')
     .external(config.externalLibs)
@@ -24,9 +27,12 @@ gulp.task('compile', function() {
       standalone: 'path'
     })
     .pipe(source('path.js'))
-    .pipe(gulp.dest(config.dist));
+    .pipe(gulp.dest(config.dist))
+    .pipe(rename({suffix: '.min'}))
+    .pipe(buffer())
+    .pipe(uglify())
+    .pipe(gulp.dest(config.dist))
 });
-
 
 gulp.task('server', function() {
   var app = connect()
@@ -56,6 +62,5 @@ gulp.task('watch', ['compile', 'server'], function () {
 });
 
 
-gulp.task('default', ['watch'], function() {
-
-});
+// Watch-compile, server
+gulp.task('default', ['watch']);

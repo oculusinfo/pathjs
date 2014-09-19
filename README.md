@@ -5,6 +5,30 @@
 More to come...
 
 
+### Building
+
+Requires [node, npm](http://nodejs.org/), and [gulp](http://gulpjs.com/). Setup:
+```
+npm install
+```
+
+To compile the project to path.js in the `dist/` directory:
+```
+gulp compile
+```
+
+To run examples you'll need [bower](http://bower.io/) to install [tween.js](https://github.com/sole/tween.js) for animation support:
+```
+bower install
+```
+
+Then to compile, watch-reload, and serve the project including examples:
+```
+gulp watch
+```
+
+
+
 ### Usage
 
 
