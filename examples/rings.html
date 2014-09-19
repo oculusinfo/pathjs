@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Example - Animating Rings</title>
+</head>
+<body>
+  <p>Demonstrates tweened node properties and picking</p>
+  <canvas id="canvas" style="width:500px; height:500px;"></canvas>
+
+  <script src="../bower_components/tween.js/src/Tween.js"></script>
+  <script src="../lib/path.js"></script>
+
+  <script>
+    var scene = path(document.getElementById('canvas'));
+
+    for (var i=0; i<20; i++) {
+      var p = path.path({
+        path: 'M-32.7929642,0A32.7929642,32.7929642,0,0,1,32.7929642,0A32.7929642,32.7929642,0,0,1,-32.7929642,0ZM-15.608177349999998,0A15.608177349999998,15.608177349999998,0,0,0,15.608177349999998,0A15.608177349999998,15.608177349999998,0,0,0,-15.608177349999998,0Z',
+        fillStyle: '#7ad',
+        strokeStyle: '#000',
+        lineDash: [8,8],
+        x: 100,
+        y: 100,
+        scaleX: 1,
+        scaleY: 1
+      });
+
+      p.tweenAttr({
+        x: Math.random() * 400 + 10,
+        y: Math.random() * 400 + 10,
+      }, {duration: 1000});
+
+      scene.addChild(p);
+    }
+
+    scene.on('mouseover', function(e) {
+      e.targetNode.fillStyle = 'red';
+      e.targetNode.tweenAttr({
+        scaleX: 1.2,
+        scaleY: 1.2
+      }, {duration: 200});
+      scene.update();
+    });
+
+    scene.on('mouseout', function(e) {
+      e.targetNode.fillStyle = '#7ad';
+      e.targetNode.tweenAttr({
+        scaleX: 1,
+        scaleY: 1
+      }, {duration: 200});
+      scene.update();
+    });
+
+    scene.update();
+  </script>
+</body>
+</html>

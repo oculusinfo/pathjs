@@ -9,89 +9,13 @@
 	<div id="qunit"></div>
 	<div id="qunit-fixture"></div>
 
-	<canvas id="canvas" width=500 height=500></canvas>
+	<canvas id="canvas" style="width:500px; height:500px;"></canvas>
 
 	<script src="../bower_components/qunit/qunit/qunit.js"></script>
+
+	<script src="../bower_components/tween.js/src/Tween.js"></script>
 	<script src="../lib/path.js"></script>
 	<script src="spec.js"></script>
 
-	<script>
-		// var scene = path(document.getElementById('canvas'));
-
-		// var group = path.group({
-		// 	x: 100,
-		// 	y: 100
-		// });
-
-		// scene.add(group);
-
-		// var group2 = path.group({
-		// 	x: 0,
-		// 	y: 0
-		// });
-
-		// group.add(group2);
-
-		// for (var i=0; i<100; i++) {
-		// 	(function() {
-		// 		var rect = path.rect({
-		// 			fillStyle: '#779', //rgb('+Math.floor(Math.random()*255)+','+Math.floor(Math.random()*255)+','+Math.floor(Math.random()*255)+')',
-		// 			x: Math.random()*300,
-		// 			y: Math.random()*300,
-		// 			width: 5 + Math.random()*50,
-		// 			height: 5 + Math.random()*50
-		// 		});
-		// 		rect.on('click', function(){
-		// 			rect.fillStyle = '#f00';
-		// 			// scene.render();
-		// 		});
-		// 		group2.add(rect);
-		// 	}());
-		// }
-
-		// var x = 0;
-		// function go() {
-		// 	group.attr({
-		// 		x: 100 + 100*Math.sin(x++/20)
-		// 	});
-		// 	group2.attr({
-		// 		y: 50 + 100*Math.cos(x++/20)
-		// 	});
-		// 	scene.render();
-
-		// 	requestAnimationFrame(go);
-		// };
-
-		// go();
-
-	</script>
-
-	<script>
-		var scene = path(document.getElementById('canvas'));
-
-		for (var i=0; i<1000; i++) {
-			(function() {
-				var p = path.path({
-					path: 'M-32.7929642,0A32.7929642,32.7929642,0,0,1,32.7929642,0A32.7929642,32.7929642,0,0,1,-32.7929642,0ZM-15.608177349999998,0A15.608177349999998,15.608177349999998,0,0,0,15.608177349999998,0A15.608177349999998,15.608177349999998,0,0,0,-15.608177349999998,0Z',
-					fillStyle: '#7dd',
-					stroke: '#000',
-					x: Math.random() * 200 + 100,
-					y: Math.random() * 200 + 100
-				});
-
-				p.on('mousemove', function() {
-					p.fillStyle = 'rgb(120,120,'+Math.floor(Math.random()*255)+')';
-				});
-
-				scene.add(p);
-			}());
-		}
-		function go() {
-			scene.render();
-			requestAnimationFrame(go);
-		};
-		go();
-
-	</script>
 </body>
 </html>

@@ -33,6 +33,7 @@ gulp.task('server', function() {
     .use(connectreload({ port: config.livereloadPort }))
     .use('/lib', serveStatic('dist'))
     .use('/test', serveStatic('test'))
+    .use('/examples', serveStatic('examples'))
     .use('/bower_components', serveStatic('bower_components'));
 
   http.createServer(app)
