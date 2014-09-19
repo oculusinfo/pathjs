@@ -3,8 +3,8 @@ var polyfill = require('./polyfills');
 var Group = require('./group');
 
 /**
- * Constructs a new scenegraph root element. Expects a `canvas` HTML
- * element.
+ * Constructs a new scenegraph root element which implements an extended
+ * Group interface. Expects a `canvas` HTML element.
  */
 var Path = function(element) {
   // Autoinstantiate
@@ -44,6 +44,11 @@ var Path = function(element) {
       self._pendingUpdate = polyfill.requestAnimationFrame( self.update );
     }
   });
+  // Create animate-update function once
+  this._animUpdate = function() {
+    TWEEN.update();
+    self.update();
+  };
 
   // Resize to current DOM-specified sizing
   this.resize();
@@ -61,6 +66,9 @@ _.extend(Path.prototype, Group.prototype, {
    * ratio.
    */
   resize: function(w, h) {
+    // TODO this may not be reliable on mobile
+    this.devicePixelRatio = window.devicePixelRatio || 1;
+
     this.width = w || this.el.clientWidth;
     this.height = h || this.el.clientHeight;
 
@@ -74,16 +82,12 @@ _.extend(Path.prototype, Group.prototype, {
    * complete.
    */
   update: function() {
-    var self = this;
-    // TODO this may not be reliable on mobile
-    var devicePixelRatio = window.devicePixelRatio || 1;
-
     // Update size to equal displayed pixel size + clear
-    this.context.canvas.width = this.width * devicePixelRatio;
-    this.context.canvas.height = this.height * devicePixelRatio;
-    if (devicePixelRatio != 1) {
+    this.context.canvas.width = this.width * this.devicePixelRatio;
+    this.context.canvas.height = this.height * this.devicePixelRatio;
+    if (this.devicePixelRatio != 1) {
       this.context.save();
-      this.context.scale(devicePixelRatio,devicePixelRatio);
+      this.context.scale(this.devicePixelRatio, this.devicePixelRatio);
     }
 
     this._pendingUpdate = null;
@@ -91,15 +95,12 @@ _.extend(Path.prototype, Group.prototype, {
     // Active animations? schedule tween update + render on next frame
     if (window.TWEEN && TWEEN.getAll().length > 0) {
       // XXX Could be an existing pending update
-      this._pendingUpdate = polyfill.requestAnimationFrame(function() {
-        TWEEN.update();
-        self.update();
-      });
+      this._pendingUpdate = polyfill.requestAnimationFrame(this._animUpdate);
     }
 
     this.render(this.context);
 
-    if (devicePixelRatio != 1) {
+    if (this.devicePixelRatio != 1) {
       this.context.restore();
     }
   },
