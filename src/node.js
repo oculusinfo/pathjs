@@ -72,6 +72,11 @@ Node.prototype = {
       this.attr(statics);
     }
 
+    if (this.tween) {
+      // TODO Jump to end state of vars not being transitioned
+      this.tween.stop();
+    }
+
     this.tween = new TWEEN.Tween(this)
       .to(attributes, transition.duration || 1000)
       .onComplete(function() {
