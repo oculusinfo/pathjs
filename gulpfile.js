@@ -19,7 +19,7 @@ var config = {
   livereloadPort: 35729
 };
 
-gulp.task('compile', function() {
+gulp.task('build', function() {
   return browserify('./'+config.src+'/main.js')
     .external(config.externalLibs)
     .bundle({
@@ -40,7 +40,7 @@ gulp.task('server', function() {
     .use('/lib', serveStatic('dist'))
     .use('/test', serveStatic('test'))
     .use('/examples', serveStatic('examples'))
-    .use('/bower_components', serveStatic('bower_components'));
+    .use('/vendor', serveStatic('node_modules'));
 
   http.createServer(app)
     .listen(config.port)
@@ -50,7 +50,7 @@ gulp.task('server', function() {
 });
 
 
-gulp.task('watch', ['compile', 'server'], function () {
+gulp.task('watch', ['build', 'server'], function () {
   var server = livereload.listen();
     // Watch for changes in `dist` folder, reload
     gulp.watch('dist/*').on('change', function(file) {
@@ -58,9 +58,9 @@ gulp.task('watch', ['compile', 'server'], function () {
     });
 
     // Watch .less files
-    gulp.watch('src/**/*', ['compile']);
+    gulp.watch('src/**/*', ['build']);
 });
 
 
-// Watch-compile, server
+// Watch-build, server
 gulp.task('default', ['watch']);
