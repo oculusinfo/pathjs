@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Example - Following Rects</title>
+</head>
+<body>
+  <p>Demonstrates simple rectangle drawing, updating, animating</p>
+  <canvas id="canvas" style="width:500px; height:500px; border: solid;"></canvas>
+
+  <script src="../vendor/tween.js/src/Tween.js"></script>
+  <script src="../lib/path.js"></script>
+
+  <script>
+    var COLORS = ["#a50026","#d73027","#f46d43","#fdae61","#fee08b","#ffffbf","#d9ef8b","#a6d96a","#66bd63","#1a9850","#006837"];
+    var animation = {duration: 250};
+
+    var canvas = document.getElementById('canvas');
+    var scene = path(canvas);
+
+    var points = [];
+    var i;
+
+    // Create a series of rectangles in a row
+    for (i=0; i<COLORS.length; i++) {
+      points.unshift( path.rect({
+        fillStyle: COLORS[i],
+        x: i*20,
+        y: i*20,
+        width: 20,
+        height: 20
+      }) );
+
+      scene.addChild( points[0] );
+    }
+
+    // Update position of points on every mouse move
+    canvas.addEventListener('mousemove', function(e) {
+      var i;
+      // Tail gets position of rect in front
+      for (i=COLORS.length-1; i > 0; i--) {
+        points[i].tweenAttr({
+          x: points[i-1].x,
+          y: points[i-1].y
+        }, animation);
+      }
+
+      // Head gets mouse position
+      points[0].tweenAttr({
+        x: e.offsetX,
+        y: e.offsetY
+      }, animation);
+
+      scene.update();
+    });
+
+    scene.update();
+  </script>
+</body>
+</html>
