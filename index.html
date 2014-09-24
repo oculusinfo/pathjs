@@ -28,37 +28,127 @@
         </ul>
       </header>
       <section>
-        <h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
+        <h1>
+<a name="pathjs" class="anchor" href="#pathjs"><span class="octicon octicon-link"></span></a>path.js</h1>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+<p><strong>Features:</strong></p>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
-
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
-
-<h3>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
-
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+<ul>
+<li>Retained mode*: A light "scene graph"-style interface for grouping, transforming, drawing, and picking</li>
+<li>SVG path interpolation: give a path object an SVG string and it will be interpolated into lines, beziers, and arcs as necessary</li>
+<li>Picking: All drawn glyphs support DOM-style event listeners for handling mouse input</li>
+</ul><p>* Some may argue that retained mode isn't a feature and immediate mode is better suited to canvas-based applications...so what's the point? This is likely true for many cases, particularly for scenes that change significantly from frame-to-frame. However, if retained mode makes sense for your application (such as in <a href="https://github.com/oculusinfo/aperturejs">ApertureJS</a>) path.js provides a simple abstraction. Think of it as an easy way to record and batch canvas commands to be replayed on demand.</p>
 
 <h3>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h3>
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+<p>Basic usage</p>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'my-canvas'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">scene</span> <span class="o">=</span> <span class="nx">path</span><span class="p">(</span><span class="nx">canvas</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">rect</span> <span class="o">=</span> <span class="nx">path</span><span class="p">.</span><span class="nx">rect</span><span class="p">({</span>
+    <span class="nx">x</span><span class="o">:</span> <span class="mi">100</span><span class="p">,</span>
+    <span class="nx">y</span><span class="o">:</span> <span class="mi">200</span><span class="p">,</span>
+    <span class="nx">width</span><span class="o">:</span> <span class="mi">50</span><span class="p">,</span>
+    <span class="nx">height</span><span class="o">:</span> <span class="mi">50</span><span class="p">,</span>
+    <span class="nx">strokeColor</span><span class="o">:</span> <span class="s1">'#777'</span><span class="p">,</span>
+    <span class="nx">strokeWidth</span><span class="o">:</span> <span class="mi">3</span>
+<span class="p">});</span>
+<span class="nx">scene</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">rect</span><span class="p">);</span>
+
+<span class="nx">scene</span><span class="p">.</span><span class="nx">update</span><span class="p">();</span>
+</pre></div>
+
+<p>SVG path support</p>
+
+<div class="highlight highlight-javascript"><pre><span class="c1">// Draw a 40px diameter ring</span>
+<span class="kd">var</span> <span class="nx">ring</span> <span class="o">=</span> <span class="nx">path</span><span class="p">.</span><span class="nx">path</span><span class="p">({</span>
+    <span class="nx">path</span><span class="o">:</span> <span class="s1">'M-20,0A20,20,0,0,1,20,0A20,20,0,0,1,-20,0ZM-10,0A10,10,0,0,0,10,0A10,10,0,0,0,-10,0Z'</span><span class="p">,</span>
+    <span class="nx">fillStyle</span><span class="o">:</span> <span class="s1">'#7ad'</span><span class="p">,</span>
+    <span class="nx">strokeStyle</span><span class="o">:</span> <span class="s1">'#000'</span><span class="p">,</span>
+<span class="p">});</span>
+<span class="nx">scene</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">ring</span><span class="p">);</span>
+
+<span class="nx">scene</span><span class="p">.</span><span class="nx">update</span><span class="p">();</span>
+</pre></div>
+
+<p>Picking and associated data</p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">rect</span><span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="nx">myDataObj</span><span class="p">);</span>
+<span class="nx">rect</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'click'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'My data: '</span> <span class="o">+</span> <span class="nx">e</span><span class="p">.</span><span class="nx">targetNode</span><span class="p">.</span><span class="nx">data</span><span class="p">());</span>
+<span class="p">});</span>
+</pre></div>
+
+<p>Mouse enter/leave detection, modify properties directly</p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">rect</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'mouseover'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">rect</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="s1">'#f00'</span><span class="p">;</span>
+    <span class="nx">scene</span><span class="p">.</span><span class="nx">update</span><span class="p">();</span>
+<span class="p">});</span>
+<span class="nx">rect</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'mouseout'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">rect</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+    <span class="nx">scene</span><span class="p">.</span><span class="nx">update</span><span class="p">();</span>
+<span class="p">});</span>
+</pre></div>
+
+<p>Animation support for numeric attributes</p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">rect</span><span class="p">.</span><span class="nx">attr</span><span class="p">({</span>
+    <span class="nx">x</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nx">y</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nx">strokeWidth</span><span class="o">:</span> <span class="mi">5</span>
+<span class="p">}).</span><span class="nx">tweenAttr</span><span class="p">({</span>
+    <span class="nx">x</span><span class="o">:</span> <span class="mi">100</span><span class="p">,</span>
+    <span class="nx">y</span><span class="o">:</span> <span class="mi">100</span><span class="p">,</span>
+    <span class="nx">strokeWidth</span><span class="o">:</span> <span class="mi">10</span>
+<span class="p">},</span> <span class="p">{</span>
+    <span class="nx">duration</span><span class="o">:</span> <span class="mi">1000</span><span class="p">,</span>
+    <span class="nx">easing</span><span class="o">:</span> <span class="s1">'ease-in-out'</span>
+<span class="p">});</span>
+
+<span class="c1">// Start all scene animations, update() will be called automatically until animation completes (1 second)</span>
+<span class="nx">scene</span><span class="p">.</span><span class="nx">update</span><span class="p">();</span>
+</pre></div>
+
+<p>Groups and basic transform support</p>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">group</span> <span class="o">=</span> <span class="nx">path</span><span class="p">.</span><span class="nx">group</span><span class="p">({</span>
+    <span class="nx">x</span><span class="o">:</span> <span class="o">-</span><span class="mi">100</span><span class="p">,</span>
+    <span class="nx">y</span><span class="o">:</span> <span class="mi">200</span><span class="p">,</span>
+    <span class="nx">rotation</span><span class="o">:</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span> <span class="o">/</span> <span class="mi">4</span><span class="p">,</span>
+    <span class="nx">scaleX</span><span class="o">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="nx">scaleY</span><span class="o">:</span> <span class="mf">0.5</span>
+<span class="p">});</span>
+<span class="nx">scene</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">group</span><span class="p">);</span>
+
+<span class="nx">group</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">rect</span><span class="p">);</span>
+</pre></div>
 
 <h3>
-<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h3>
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+<p>The MIT License (MIT)</p>
 
-<h3>
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
+<p>Copyright (c) 2014 Oculus Info Inc.</p>
 
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/oculusinfo">oculusinfo</a></p>
