@@ -4,7 +4,7 @@
   "description": "A minimal retained mode wrapper with picking support around the Canvas API",
   "main": "index.js",
   "scripts": {
-    "build": "gulp compile",
+    "build": "gulp build",
     "watch": "gulp watch"
   },
   "author": "Rob Harper",
