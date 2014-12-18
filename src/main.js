@@ -150,6 +150,7 @@ var namespaceConstructors = {
   path: require('./path'),
   text: require('./text'),
   image: require('./image'),
+  line: require('./line'),
   group: Group
 };
 
